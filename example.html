@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="jQuery Default Button Plugin" />
+    <title>jQuery Default Button Plugin</title>    
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script src="mouseselector.js"></script>
+    <style>
+        section {
+            padding-top:30px;
+        }
+
+        .canvas {
+            height: 300px;
+            width: 100%;
+            background-color: #fafafa;
+            border: 1px solid #aaa;
+            position: relative;
+        }
+
+        .selectable {
+            display: inline-block;
+            background-color: #FFF;
+            height: 35px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .selected {
+            border-color: #0090FF;
+        }
+
+        #draggable div {
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="page-header">
+            <h1>
+                jQuery Mouse Selector Plugin - Demo
+            </h1>
+        </div>
+
+        <p class="lead">
+            This plugin enables users to select elements by clicking and dragging the cursor. <br />
+            Give it a try!
+        </p>        
+
+       <section>
+           <h2>
+                Basic Example
+            </h2>
+
+           <p>
+               Click the mouse outside the Selectable Elements and drag the cursor to any of them.
+           </p>
+
+           <div class="canvas" id="basic">
+               <div class="selectable">
+                   Selectable Element 1
+               </div>
+               <div class="selectable">
+                   Selectable Element 2
+               </div>
+               <div class="selectable">
+                   Selectable Element 3
+               </div>
+           </div>
+
+       </section>
+        
+
+        <section>
+           <h2>
+                Draggable Elements Example
+            </h2>
+
+           <p>
+               Click the mouse outside the Item blocks and drag the cursor to any of the Item blocks.
+           </p>
+
+           <div class="canvas" id="draggable">
+               <div class="selectable">
+                   Selectable Element 1
+               </div>
+               <div class="selectable">
+                   Selectable Element 2
+               </div>
+               <div class="selectable">
+                   Selectable Element 3
+               </div>
+           </div>
+
+       </section>
+
+        
+       <div class="footer">
+           <br />
+       </div>
+        
+            
+    </div>
+    <script>
+        $(function () {
+            
+            $('#basic').mouseSelector('.selectable', {
+                onSelected: function (selected) {
+                    
+                    //removes selected class from all items
+                    $('#basic .selectable').removeClass('selected');
+
+                    for (var i = 0; i < selected.length; i++) {
+                        selected[i].addClass('selected');
+                    }
+                }
+            });
+
+            $('#draggable .selectable').draggable();
+
+            $('#draggable').mouseSelector('.selectable', {                
+                onSelected: function (selected) {
+
+                    //removes selected class from all items
+                    $('#draggable .selectable').removeClass('selected');
+
+                    for (var i = 0; i < selected.length; i++) {
+                        selected[i].addClass('selected');
+                    }
+                }
+            });
+            
+            
+        });
+    </script>
+</body>

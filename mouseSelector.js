@@ -5,6 +5,8 @@
         
         base.$el = $(el);
         base.el = el;
+        base.selected = [];
+
         var x0 = 0,
             y0 = 0,
             x1 = 0,
@@ -17,9 +19,15 @@
         base.$el.data("mouseSelector", base);
 
         var disableSelection = function() {
-            base.$el.attr('unselectable', 'on')
+            $('body').attr('unselectable', 'on')
                  .css('user-select', 'none')
                  .on('selectstart', false);
+        };
+
+        var enableSelection = function () {
+            $('body').removeAttr('unselectable')
+                 .css('user-select', 'auto')
+                 .unbind('selectstart');
         };
 
         var createSelector = function(evt) {
@@ -110,7 +118,7 @@
             base.options = $.extend({}, $.mouseSelector.defaultOptions, options);
 
             
-            disableSelection();
+            //disableSelection();
 
             base.$el.mousedown(function (evt) {
 
@@ -118,6 +126,7 @@
 
                 if ($(base.itemSelector).has(target).length > 0 || target.is(base.itemSelector)) return;
                 
+                disableSelection();
                 isDown = true;
                 createSelector(evt);
             });
@@ -125,15 +134,16 @@
            
             $(document).mouseup(function () {
                 isDown = false;
+                enableSelection();
                 if ($div != null) {
 
-                    var selected = findIntersectors($div, base.itemSelector);
+                    base.selected = findIntersectors($div, base.itemSelector);
                     
                     $div.remove();
                     $div = null;
 
-                    if(selected.length > 0 && base.options.onSelected !== undefined) {
-                        options.onSelected(selected);
+                    if(base.options.onSelected !== undefined) {
+                        options.onSelected(base.selected);
                     }
                 }
 
@@ -144,13 +154,13 @@
             });
 
         };
-        
+                        
         base.init();
+        
     };
 
     $.mouseSelector.defaultOptions = {
-        selectorCssClass: '',
-        
+        selectorCssClass: ''
     };
 
     $.fn.mouseSelector = function (itemSelector, options) {
